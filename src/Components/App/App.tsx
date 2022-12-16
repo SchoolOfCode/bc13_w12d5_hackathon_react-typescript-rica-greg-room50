@@ -6,8 +6,7 @@ import Display from '../Display';
 export type cityInfoObj = {
   lat: number,
   lon: number,
-  city: string,
-  
+  city: string
 }
 
 export type weatherObj = {
@@ -26,6 +25,13 @@ export type weatherObj = {
   wind: {deg: number, gust: number, speed: number}
 }
 
+export type forecastArr = {
+  time: string,
+  temp: number,
+  description: string,
+  icon: string
+}[]
+
 function App() {
   const [cityInfo, setCityInfo] = useState <cityInfoObj> ({lat: 0, lon: 0, city: ""});
   const [weather, setWeather] = useState <weatherObj> ({
@@ -43,6 +49,7 @@ function App() {
     weather: [{id: 0, main: "", description: "", icon: ""}],
     wind: {deg: 0, gust: 0, speed: 0}
   });
+  const [forecast, setForecast] = useState <forecastArr>([{time: "", temp: 0, description: "", icon: ""}])
   const [userInput, setUserInput] = useState("");
   const [search, setSearch] = useState("");
   const apiKey = "5719296ca5bace34a0a2a4c27f534df4"
@@ -67,6 +74,24 @@ function App() {
     const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${cityInfo.lat}&lon=${cityInfo.lon}&appid=${apiKey}&units=metric`)
     const data = await response.json();
     setWeather(data);
+    getForecast();
+  }
+
+  async function getForecast(){
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityInfo.lat}&lon=${cityInfo.lon}&appid=${apiKey}&units=metric`)
+    const data = await response.json();
+    console.log("Forecast", data)
+    let forecastArr = [];
+    for (let i = 0; i < 4; i++) {
+      const forecastObj = {
+        time: data.list[i].dt_txt,
+        temp: data.list[i].main.temp,
+        description: data.list[i].weather[0].description,
+        icon: data.list[i].weather[0].icon
+      }
+      forecastArr.push(forecastObj)
+    }
+    setForecast(forecastArr)
   }
 
   async function getCityInfo(city : string){
@@ -77,7 +102,6 @@ function App() {
       lon: data[0].lon,
       city: data[0].name
     }
-    console.log("where is my city", data[0].name)
     setCityInfo(cityInfoObj);
   }
 
@@ -92,7 +116,7 @@ function App() {
   return (
     <div className="App">
       <Search handleUserInput={handleUserInput} handleClick={handleClick} />
-      <Display cityInfo={cityInfo} weather={weather}/>
+      <Display cityInfo={cityInfo} weather={weather} forecast={forecast}/>
     </div>
   );
 }
