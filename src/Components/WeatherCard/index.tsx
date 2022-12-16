@@ -17,7 +17,7 @@ return (
 <div className="boss">
     <div className="main-card">
     <h2>{weather.name}</h2>
-    <h1>{weather.main.temp}°C</h1>
+    <h1>{Math.floor(weather.main.temp)}°C</h1>
      <img
     src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
     alt="weather-icon"
@@ -32,7 +32,7 @@ return (
             <li>{element?.time.split(" ")[1]?.slice(0, 5)}</li>
             <li><img src={`http://openweathermap.org/img/wn/${element.icon}@2x.png`} alt="weather-icon"/></li>
             <li className="single-card-description">{element.description}</li>
-            <li>{element.temp}°C</li>
+            <li>{Math.floor(element.temp)}°C</li>
         </ul>
         </div>
     ))}
