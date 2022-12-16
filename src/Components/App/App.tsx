@@ -3,13 +3,15 @@ import './App.css';
 import Search from '../Search';
 import Display from '../Display';
 
-type cityInfoObj = {
+export type cityInfoObj = {
   lat: number,
-  lon: number
+  lon: number,
+  city: string,
+  
 }
 
 function App() {
-  const [cityInfo, setCityInfo] = useState <cityInfoObj> ({lat: 0, lon: 0});
+  const [cityInfo, setCityInfo] = useState <cityInfoObj> ({lat: 0, lon: 0, city: ""});
   const [weather, setWeather] = useState({});
   const [userInput, setUserInput] = useState("");
   const [search, setSearch] = useState("");
@@ -42,8 +44,10 @@ function App() {
     const data = await response.json()
     const cityInfoObj : cityInfoObj = {
       lat: data[0].lat,
-      lon: data[0].lon
+      lon: data[0].lon,
+      city: data[0].name
     }
+    console.log("where is my city", data[0].name)
     setCityInfo(cityInfoObj);
   }
 
@@ -58,7 +62,7 @@ function App() {
   return (
     <div className="App">
       <Search handleUserInput={handleUserInput} handleClick={handleClick} />
-      <Display />
+      <Display cityInfo={cityInfo}/>
     </div>
   );
 }
