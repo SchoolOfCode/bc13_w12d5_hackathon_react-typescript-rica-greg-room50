@@ -38,7 +38,8 @@ function App() {
     base: "",
     clouds: {all: 0},
     cod: 0,
-    coord: {lon: 0, lat: 0},
+    coord: {lon: -0.1276, lat: 
+51.5073},
     dt: 0,
     id: 0,
     main: {feels_like: 0, grnd_level: 0, humidity: 0, pressure: 0, sea_level: 0, temp: 0, temp_max: 0, temp_min: 0},
@@ -68,6 +69,7 @@ function App() {
 
   function handleClick() {
     setSearch(userInput)
+    setUserInput("")
   }
 
   async function getWeather(){
@@ -115,8 +117,9 @@ function App() {
 
   return (
     <div className="App">
-      <Search handleUserInput={handleUserInput} handleClick={handleClick} />
-      <Display cityInfo={cityInfo} weather={weather} forecast={forecast}/>
+      <h1>Weather App</h1>
+      <Search userInput={userInput} handleUserInput={handleUserInput} handleClick={handleClick} />
+      {search ? <Display cityInfo={cityInfo} weather={weather} forecast={forecast}/> : null}
     </div>
   );
 }
